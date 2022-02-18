@@ -1,0 +1,10 @@
+.hobby-list {
+
+}
+
+.hobby-list .active {
+    color: deeppink
+}
+.hobby-list li {
+    transition: all .35s ease-in-out 0s;
+}
