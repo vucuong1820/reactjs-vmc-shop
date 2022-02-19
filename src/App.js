@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import Header from './components/Header';
 import AlbumFeature from './features/Album';
 import ProductFeature from './features/Product';
