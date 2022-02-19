@@ -1,7 +1,7 @@
+import { Box, Container, Grid, makeStyles, Paper } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Box, Container, Grid, makeStyles, Paper, Typography } from '@material-ui/core';
 import productApi from '../../../api/productApi';
+import ProductList from '../components/ProductList';
 import ProductSkeleton from '../components/ProductSkeleton';
 
 ListPage.propTypes = {};
@@ -13,19 +13,23 @@ const useStyles = makeStyles((theme) => ({
   },
 
   right: {
-    flex: '1 1 auto',
+    flex: '1 1 0',
   },
 }));
 function ListPage(props) {
   const classes = useStyles();
   const [productList, setProductList] = useState([]);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     (async () => {
-      const response = await productApi.getAll({ _page: 1, _limit: 10 });
-      console.log('response: ', response);
-
-    //   setLoading(false)
+      try {
+        const response = await productApi.getAll({ _page: 1, _limit: 10 });
+        console.log('response: ', response);
+        setProductList(response.data);
+        setLoading(false)
+      } catch (error) {
+        console.log('Failed to fetch product api:', error);
+      }
     })();
   }, []);
   return (
@@ -35,13 +39,8 @@ function ListPage(props) {
           <Grid item className={classes.left}>
             <Paper elevation={0}>Left</Paper>
           </Grid>
-
           <Grid item className={classes.right}>
-            <Paper elevation={0}>
-                {
-                    loading ? <ProductSkeleton/> : <Typography>Product List</Typography>
-                }
-            </Paper>
+            <Paper elevation={0}>{loading ? <ProductSkeleton /> : <ProductList data={productList}/>}</Paper>
           </Grid>
         </Grid>
       </Container>
