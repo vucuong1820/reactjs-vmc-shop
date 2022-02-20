@@ -23,7 +23,7 @@ function ProductSkeleton({ length }) {
                     <Skeleton />
                     <Skeleton width="60%" />
                 </Box>
-              </Grid>
+              </Grid> 
           ))
         }   
       </Grid>
