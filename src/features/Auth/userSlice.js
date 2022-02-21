@@ -49,7 +49,6 @@ const counterSlice = createSlice({
         },
     }
 })
-console.log([login.fulfilled]);
 
 const { actions, reducer } = counterSlice;
 export const { logout } = actions;
