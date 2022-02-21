@@ -5,6 +5,7 @@ import productApi from '../../../api/productApi';
 import ProductList from '../components/ProductList';
 import ProductSkeleton from '../components/ProductSkeleton';
 import ProductSort from '../components/ProductSort';
+import ProductFilters from '../components/ProductFilters'
 
 ListPage.propTypes = {};
 const useStyles = makeStyles((theme) => ({
@@ -62,13 +63,22 @@ function ListPage(props) {
       ...prevFilters,
       _sort: newValue,
     }));
+  };
+
+  const handleFiltersChange = (newFilters) => {
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      ...newFilters
+    }))
   }
   return (
     <Box>
       <Container>
         <Grid container spacing={1}>
           <Grid item className={classes.left}>
-            <Paper elevation={0}>Left</Paper>
+            <Paper elevation={0}>
+              <ProductFilters onChange={handleFiltersChange} filters={filters}/>
+            </Paper>
           </Grid>
           <Grid item className={classes.right}>
             <Paper elevation={0}>
