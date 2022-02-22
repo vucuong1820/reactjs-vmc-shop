@@ -70,6 +70,7 @@ function ListPage(props) {
       ...prevFilters,
       ...newFilters
     }))
+    console.log('filters: ',filters);
   }
   return (
     <Box>
