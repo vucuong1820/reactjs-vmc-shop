@@ -13,14 +13,18 @@ export const register = createAsyncThunk('user/register', async (payload) => {
 })
 
 export const login = createAsyncThunk('user/login', async (payload) => {
-    // call api
-    const data = await userApi.login(payload)
-    // save to localStorage
-    localStorage.setItem(StorageKeys.TOKEN,data.jwt)
-    localStorage.setItem(StorageKeys.USER,JSON.stringify(data.user))
+   try {
+        // call api
+        const data = await userApi.login(payload)
+        // save to localStorage
+        localStorage.setItem(StorageKeys.TOKEN,data.jwt)
+        localStorage.setItem(StorageKeys.USER,JSON.stringify(data.user))
 
-    // return data
-    return data.user;
+        // return data
+        return data.user;
+   } catch (error) {
+       console.log('Failed to fetch api user login: ', error);
+   }
 })
 
 const counterSlice = createSlice({
