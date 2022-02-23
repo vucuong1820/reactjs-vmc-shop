@@ -100,7 +100,6 @@ function FilterByPrice({ onChange }) {
         InputProps={{
             inputComponent: NumberFormatCustom,
           }}
-        marginBottom="8px"
         />
         <span> </span>
         <CustomTextField

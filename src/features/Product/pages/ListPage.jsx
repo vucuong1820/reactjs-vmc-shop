@@ -6,6 +6,7 @@ import ProductList from '../components/ProductList';
 import ProductSkeleton from '../components/ProductSkeleton';
 import ProductSort from '../components/ProductSort';
 import ProductFilters from '../components/ProductFilters'
+import FilterViewer from '../components/Filters/FilterViewer';
 
 ListPage.propTypes = {};
 const useStyles = makeStyles((theme) => ({
@@ -71,6 +72,10 @@ function ListPage(props) {
       ...newFilters
     }))
     console.log('filters: ',filters);
+  };
+
+  const setNewFilters = (newFilters) => {
+    setFilters(newFilters)
   }
   return (
     <Box>
@@ -84,6 +89,7 @@ function ListPage(props) {
           <Grid item className={classes.right}>
             <Paper elevation={0}>
               <ProductSort currentSort={filters._sort} onChange={handleSortChange}/>
+              <FilterViewer filters={filters} onChange={setNewFilters}/>
               {loading ? <ProductSkeleton length={9} /> : <ProductList data={productList} />}
               <Box className={classes.pagination}>
                 <Pagination
