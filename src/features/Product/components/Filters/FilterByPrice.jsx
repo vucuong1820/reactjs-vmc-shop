@@ -54,9 +54,6 @@ const useStyles = makeStyles((theme) => ({
   },
   field: {
     marginBottom: theme.spacing(1),
-    '&:hover fieldset': {
-        borderColor: 'yellow',
-    }
   },
   button: {
       '&:hover': {
