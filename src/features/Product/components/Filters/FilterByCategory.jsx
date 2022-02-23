@@ -44,9 +44,9 @@ function FilterByCategory({ onChange }) {
         })()
     },[]);
 
-    const handleCategoryClick = (newCategoryId) => {
+    const handleCategoryClick = (newCategoryId, newCategoryName) => {
         if(!onChange) return;
-        onChange(newCategoryId)
+        onChange(newCategoryId, newCategoryName)
     }
     return (
         <Box className={classes.root}>
@@ -56,7 +56,7 @@ function FilterByCategory({ onChange }) {
             <ul className={classes.menu}>
                 {
                     categoryList.map(category => (
-                        <li key={category.id} onClick={() => handleCategoryClick(category.id)}>
+                        <li key={category.id} onClick={() => handleCategoryClick(category.id, category.name)}>
                             <Typography variant="body2">{category.name}</Typography>
                         </li>
                     ))
