@@ -132,7 +132,7 @@ export default function ButtonAppBar() {
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
-        fullWidth="md"
+        maxWidth="lg"
       >
         <IconButton>
           <Close onClick={handleClose} className={classes.closeButton} />
