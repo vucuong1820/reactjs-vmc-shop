@@ -1,23 +1,37 @@
-import { Box, Container, Grid, makeStyles, Paper } from '@material-ui/core';
+import { Box, Container, Grid, LinearProgress, makeStyles, Paper } from '@material-ui/core';
 import React from 'react';
+import { Route, Router, Switch } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
 import AddToCartForm from '../components/AddToCartForm';
+import ProductAdditional from '../components/ProductAdditional';
+import ProductDescription from '../components/ProductDescription';
 import ProductInfo from '../components/ProductInfo';
+import ProductMenu from '../components/ProductMenu';
+import ProductReviews from '../components/ProductReviews';
 import ProductThumbnail from '../components/ProductThumbnail';
 import useProductDetail from '../hooks/useProductDetail';
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    paddingBottom: theme.spacing(3)
+  },
 
   left: {
     width: '400px',
     padding: theme.spacing(1.5),
-    borderRight: `1px solid ${theme.palette.grey[300]}`,
+    borderRight: `1px solid ${theme.palette.grey[150]}`,
   },
 
   right: {
     flex: '1 1 0',
     padding: theme.spacing(1.5),
+  },
+
+  loading: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
   },
 }));
 
@@ -28,11 +42,14 @@ function DetailPage(props) {
 
   const { product, loading } = useProductDetail(productId);
   const handleAddToCart = (formValues) => {
-    console.log('Form submit:',formValues);
-  }
+    console.log('Form submit:', formValues);
+  };
   if (loading) {
-    //MAKE IT BEAUTIFUL!
-    return <Box>Loading</Box>;
+    return (
+      <Box>
+        <LinearProgress className={classes.loading} />
+      </Box>
+    );
   }
 
   return (
@@ -45,11 +62,25 @@ function DetailPage(props) {
             </Grid>
 
             <Grid item className={classes.right}>
-              <ProductInfo product={product}/>
-              <AddToCartForm onSubmit={handleAddToCart}/>
+              <ProductInfo product={product} />
+              <AddToCartForm onSubmit={handleAddToCart} />
             </Grid>
           </Grid>
         </Paper>
+        <ProductMenu />
+        <Switch>
+          <Route path={match.url} exact>
+            <ProductDescription product={product} />
+          </Route>
+
+          <Route path={`${match.url}/additional`} exact>
+            <ProductAdditional />
+          </Route>
+
+          <Route path={`${match.url}/reviews`} exact>
+            <ProductReviews />
+          </Route>
+        </Switch>
       </Container>
     </Box>
   );
