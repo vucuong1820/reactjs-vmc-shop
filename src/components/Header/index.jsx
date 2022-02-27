@@ -1,4 +1,4 @@
-import { Box, IconButton, Menu, MenuItem } from '@material-ui/core';
+import { Badge, Box, IconButton, Menu, MenuItem } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -6,14 +6,16 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { AccountCircle, Close } from '@material-ui/icons';
+import { AccountCircle, Close, ShoppingCart } from '@material-ui/icons';
 import CodeIcon from '@material-ui/icons/Code';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import Login from '../../features/Auth/components/Login';
 import Register from '../../features/Auth/components/Register';
 import { logout } from '../../features/Auth/userSlice';
+import { cartItemsCountSelector } from '../../features/Cart/selectors';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,6 +47,8 @@ const MODE = {
 
 export default function ButtonAppBar() {
   const dispatch = useDispatch();
+  const history = useHistory()
+  const cartItemsCount = useSelector(cartItemsCountSelector)
   const currentUser = useSelector((state) => state.user.current);
   const isLogined = Boolean(currentUser.id);
   const [open, setOpen] = useState(false);
@@ -60,19 +64,21 @@ export default function ButtonAppBar() {
   };
 
   const handleUserClick = (e) => {
-    setAnchorEl(e.currentTarget)
+    setAnchorEl(e.currentTarget);
   };
 
   const handleCloseMenu = (e) => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
 
   const handleLogout = () => {
     const action = logout();
     dispatch(action);
-    setAnchorEl(null)
+    setAnchorEl(null);
+  };
+  const handleCartClick= () => {
+    history.push('/cart')
   }
-
   const classes = useStyles();
 
   return (
@@ -105,20 +111,25 @@ export default function ButtonAppBar() {
               <AccountCircle />
             </IconButton>
           )}
-          <Menu 
-          anchorEl={anchorEl} 
-          keepMounted 
-          open={Boolean(anchorEl)} 
-          onClose={handleCloseMenu}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          getContentAnchorEl={null}
+          <IconButton aria-label="show 11 new notifications" color="inherit" onClick={handleCartClick}>
+            <Badge badgeContent={cartItemsCount} color="secondary">
+              <ShoppingCart />
+            </Badge>
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleCloseMenu}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            getContentAnchorEl={null}
           >
             <MenuItem onClick={handleCloseMenu}>My account</MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
