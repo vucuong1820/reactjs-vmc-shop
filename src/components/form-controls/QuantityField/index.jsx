@@ -7,6 +7,8 @@ import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Controller } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { setQuantity } from  "../../../features/Cart/cartSlice"
 
 QuantityField.propTypes = {
   form: PropTypes.object.isRequired,
@@ -14,6 +16,8 @@ QuantityField.propTypes = {
 
   label: PropTypes.string,
   disabled: PropTypes.bool,
+  onChange: PropTypes.func,
+  item: PropTypes.object,
 };
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -24,25 +28,41 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexFlow: 'row nowrap',
     alignItems: 'center',
-    maxWidth: '175px',
+    maxWidth: '160px',
   }
 }))
 function QuantityField(props) {
+  const dispatch = useDispatch()
   const classes = useStyles()
-  const { form, name, label, disabled } = props;
-  const { errors, setValue } = form;
+  const { form, name, label, disabled, onChange, item } = props;
+  const { errors, setValue, getValues } = form;
   const hasError = errors[name];
+  const handleIncrease = (value) => {
+    if(item){
+      setValue(name, Number.parseInt(item.quantity) ? Number.parseInt(item.quantity) + 1 : 1)
+    }else{
+      setValue(name, Number.parseInt(value) ? Number.parseInt(value) + 1 : 1)
+    }
+    if(onChange) onChange(getValues())
+  };
+  const handleDecrease = (value) => {
+    if(item){
+      setValue(name, Number.parseInt(item.quantity) ? Number.parseInt(item.quantity) - 1 : 1)
+    }else{
+      setValue(name, Number.parseInt(value) ? Number.parseInt(value) - 1 : 1)
+    }
+    if(onChange) onChange(getValues())
+  }
   return (
     <div>
       <FormControl error={!!hasError} fullWidth margin="normal" variant="outlined" size="small">
         <Typography className={classes.label}>{label}</Typography>
-
         <Controller
           name={name}
           control={form.control}
           render={({ onChange, onBlur, value, name, ref }) => (
             <Box className={classes.box}>
-              <IconButton onClick={() => setValue(name, Number.parseInt(value) ? Number.parseInt(value) - 1 : 1)}>
+              <IconButton onClick={() => handleDecrease(value)}>
                 <RemoveCircleOutlineIcon />
               </IconButton>
               <OutlinedInput
@@ -51,10 +71,17 @@ function QuantityField(props) {
                 disabled={disabled}
                 name={name}
                 value={value}
-                onChange={onChange}
+                onChange={(e) => {
+                  onChange()
+                  const action = setQuantity({
+                      id: item.id,
+                      quantity: Number.parseInt(e.target.value)
+                  })
+                  dispatch(action)
+                }}
                 onBlur={onBlur}
               />
-              <IconButton onClick={() => setValue(name, Number.parseInt(value) ? Number.parseInt(value) + 1 : 1)}>
+              <IconButton onClick={() => handleIncrease(value)}>
                 <AddCircleOutlineIcon />
               </IconButton>
             </Box>
