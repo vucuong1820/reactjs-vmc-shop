@@ -28,11 +28,11 @@ function CartProduct({ count }) {
   return (
     <Box className={classes.root}>
       <Typography variant="h5" className={classes.title}>
-        Giỏ hàng ({`${count} sản phẩm`})
+        Giỏ hàng ({`${count || 'chưa có'} sản phẩm`})
       </Typography>
       <ul className={classes.listProduct}>
-        {cartItemList.map((item, index) => (
-          <li key={index}>
+        {cartItemList.map((item) => (
+          <li key={item.id}>
             <CartItem item={item} />
           </li>
         ))}

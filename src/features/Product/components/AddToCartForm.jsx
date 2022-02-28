@@ -16,9 +16,9 @@ AddToCartForm.propTypes = {
 };
 
 function AddToCartForm({ onSubmit = null }) {
-  const isShowMiniCart = useSelector(state => state.cart.showMiniCart)
-  const { enqueueSnackbar } = useSnackbar()
-  const dispatch = useDispatch()
+  const isShowMiniCart = useSelector((state) => state.cart.showMiniCart);
+  const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
   const schema = yup.object().shape({
     quantity: yup
       .number()
@@ -35,15 +35,18 @@ function AddToCartForm({ onSubmit = null }) {
   });
 
   const handleSubmit = async (values) => {
-    enqueueSnackbar('Đã thêm sản phẩm vào giỏ hàng',{variant: 'success', autoHideDuration:2000}, )
+    enqueueSnackbar('Đã thêm sản phẩm vào giỏ hàng', {
+      variant: 'success',
+      autoHideDuration: 2000,
+      anchorOrigin: { vertical: 'top', horizontal: 'center' },
+    });
     if (onSubmit) await onSubmit(values);
-    
   };
 
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
       <QuantityField form={form} name="quantity" label="Số lượng sản phẩm" />
-      <Button type="submit" fullWidth variant="contained" color="primary" size="large" style={{width: '200px'}}>
+      <Button type="submit" fullWidth variant="contained" color="primary" size="large" style={{ width: '200px' }}>
         Buy
       </Button>
     </form>

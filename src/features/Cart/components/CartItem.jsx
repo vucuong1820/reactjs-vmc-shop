@@ -7,8 +7,9 @@ import QuantityField from '../../../components/form-controls/QuantityField';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { setQuantity } from '../cartSlice';
+import { removeFromCart, setQuantity } from '../cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import ConfirmDialog from '../../../components/ConfirmDialog/ConfirmDialog';
 
 
 CartItem.propTypes = {
@@ -70,7 +71,11 @@ function CartItem({ item }) {
     })
     dispatch(action)
   }
-  const totalPrice = item.quantity * item.product.salePrice
+  const handleDeleteCart = ({id}) => {
+    const action = removeFromCart(id)
+    dispatch(action)
+  }
+  const totalPrice = item.quantity * item.product.salePrice || 0
   const classes = useStyles();
   const thumbnailUrl = item.product.thumbnail?.url
     ? `${STATIC_HOST}${item.product.thumbnail.url}`
@@ -83,7 +88,7 @@ function CartItem({ item }) {
           <Typography>{item.product.name} </Typography>
         </Box>
         <Typography className={classes.price}>{formatPrice(item.product.salePrice)}</Typography>
-        <QuantityField form={form} name="quantity" onChange={handleUpdateQuantity} item={item}/>
+        <QuantityField form={form} name="quantity" onChange={handleUpdateQuantity} item={item} onDelete={handleDeleteCart}/>
         <Typography className={classes.totalPrice}>Thành tiền: <span>{`${formatPrice(totalPrice)}`}</span></Typography>
       </Box>
   );
