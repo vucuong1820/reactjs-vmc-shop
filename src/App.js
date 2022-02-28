@@ -11,7 +11,7 @@ function App() {
     <div className="App">
       <Header/>
       <Switch>
-        <Redirect from='/home' to="/" exact/>
+        <Redirect from='/' to="/products" exact/>
         <Redirect from='/post-list/:postId' to="/posts/:postId" exact/>
         <Route path="/albums" component={AlbumFeature}/>
         <Route path="/products" component={ProductFeature}/>
