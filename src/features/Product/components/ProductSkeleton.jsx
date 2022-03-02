@@ -13,7 +13,7 @@ ProductSkeleton.defaultProps = {
 function ProductSkeleton({ length }) {
   return (
     <Box>
-      <Grid container >
+      <Grid container>
         {
           // create empty array with length from props
           Array.from({ length }).map((x, index) => (

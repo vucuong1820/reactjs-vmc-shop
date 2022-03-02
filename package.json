@@ -28,6 +28,7 @@
     "react-scripts": "5.0.0",
     "reactstrap": "^9.0.1",
     "redux": "^4.1.2",
+    "strapi-plugin-content-search": "^0.6.0",
     "styled-components": "^5.3.3",
     "web-vitals": "^2.1.2",
     "yup": "^0.32.11"

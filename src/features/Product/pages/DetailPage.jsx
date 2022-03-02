@@ -1,6 +1,6 @@
 import { Box, Container, Grid, LinearProgress, makeStyles, Paper } from '@material-ui/core';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, Router, Switch } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
 import { addToCart } from '../../Cart/cartSlice';
@@ -15,7 +15,7 @@ import useProductDetail from '../hooks/useProductDetail';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    paddingBottom: theme.spacing(3)
+    paddingBottom: theme.spacing(3),
   },
 
   left: {
@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function DetailPage(props) {
+  const currenUserId = useSelector((state) => state.user.current.id);
   const dispatch = useDispatch();
   const classes = useStyles();
   const match = useRouteMatch();
@@ -46,12 +47,14 @@ function DetailPage(props) {
   const { product, loading } = useProductDetail(productId);
   const handleAddToCart = ({ quantity }) => {
     const action = addToCart({
-      id: productId,
-      product,
-      quantity
-    })
-    dispatch(action)
-    
+      userId: currenUserId,
+      newItem: {
+        id: productId,
+        product,
+        quantity,
+      },
+    });
+    dispatch(action);
   };
   if (loading) {
     return (

@@ -1,9 +1,9 @@
-import { Badge, Box, IconButton, Menu, MenuItem } from '@material-ui/core';
+import { Badge, Box, IconButton, InputBase, Menu, MenuItem } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import { makeStyles } from '@material-ui/core/styles';
+import {alpha, makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { AccountCircle, Close, ShoppingCart } from '@material-ui/icons';
@@ -16,16 +16,34 @@ import Login from '../../features/Auth/components/Login';
 import Register from '../../features/Auth/components/Register';
 import { logout } from '../../features/Auth/userSlice';
 import { cartItemsCountSelector } from '../../features/Cart/selectors';
+import SearchBar from '../SearchBar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    position: 'relative'
   },
   menuButton: {
     marginRight: theme.spacing(2),
   },
-  title: {
+  search: {
+    marginTop: '4px',
+    position: 'relative',
     flexGrow: 1,
+    marginRight: theme.spacing(15),
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+
+  },
+  
+
+  title: {
+    width:'150px'
   },
   link: {
     color: '#fff',
@@ -37,6 +55,9 @@ const useStyles = makeStyles((theme) => ({
     top: theme.spacing(2),
     right: theme.spacing(1),
     zIndex: 1,
+  },
+  icon: {
+    justifySelf: 'flex-end'
   },
 }));
 
@@ -56,11 +77,13 @@ export default function ButtonAppBar() {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setOpen(true)
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleClose = (event,reason) => {
+    if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+      setOpen(false)
+    }
   };
 
   const handleUserClick = (e) => {
@@ -92,26 +115,22 @@ export default function ButtonAppBar() {
               MC Shop
             </Link>
           </Typography>
+          <Box className={classes.search}>
+            <SearchBar />
+          </Box>
 
-          <NavLink className={classes.link} to="/todos">
-            <Button color="inherit">TODOS</Button>
-          </NavLink>
-
-          <NavLink className={classes.link} to="/albums">
-            <Button color="inherit">ALBUMS</Button>
-          </NavLink>
           {!isLogined && (
-            <Button color="inherit" onClick={handleClickOpen}>
+            <Button className={classes.icon} color="inherit" onClick={handleClickOpen}>
               Log In
             </Button>
           )}
 
           {isLogined && (
-            <IconButton color="inherit" onClick={handleUserClick}>
+            <IconButton className={classes.icon} color="inherit" onClick={handleUserClick}>
               <AccountCircle />
             </IconButton>
           )}
-          <IconButton aria-label="show 11 new notifications" color="inherit" onClick={handleCartClick}>
+          <IconButton className={classes.icon} aria-label="show 11 new notifications" color="inherit" onClick={handleCartClick}>
             <Badge badgeContent={cartItemsCount} color="secondary">
               <ShoppingCart />
             </Badge>
@@ -138,15 +157,13 @@ export default function ButtonAppBar() {
       </AppBar>
 
       <Dialog
-        disableBackdropClick
-        disableEscapeKeyDown
         open={open}
-        onClose={handleClose}
         aria-labelledby="form-dialog-title"
         maxWidth="lg"
+        onClose={handleClose}
       >
-        <IconButton>
-          <Close onClick={handleClose} className={classes.closeButton} />
+        <IconButton onClick={handleClose}>
+          <Close  className={classes.closeButton} />
         </IconButton>
 
         <DialogContent>

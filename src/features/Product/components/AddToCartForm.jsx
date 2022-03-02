@@ -1,24 +1,19 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@material-ui/core';
+import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
-import InputField from '../../../components/form-controls/InputField';
-import { useSnackbar } from 'notistack';
-
 import QuantityField from '../../../components/form-controls/QuantityField';
-import { hideMiniCart, showMiniCart } from '../../Cart/cartSlice';
+
 
 AddToCartForm.propTypes = {
   onSubmit: PropTypes.func,
 };
 
 function AddToCartForm({ onSubmit = null }) {
-  const isShowMiniCart = useSelector((state) => state.cart.showMiniCart);
-  const { enqueueSnackbar } = useSnackbar();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();;
   const schema = yup.object().shape({
     quantity: yup
       .number()

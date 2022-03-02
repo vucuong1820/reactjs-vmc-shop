@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Box, makeStyles, Typography } from '@material-ui/core';
 import categoryApi from '../../../../api/categoryApi';
+import { Skeleton } from '@material-ui/lab';
 
 FilterByCategory.propTypes = {
     onChange: PropTypes.func,
@@ -27,6 +28,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function FilterByCategory({ onChange }) {
+    const [loading, setLoading] = useState(true)
+    console.log(loading)
     const classes = useStyles()
     const [categoryList, setCategoryList] = useState([]);
     useEffect(() => {
@@ -37,13 +40,14 @@ function FilterByCategory({ onChange }) {
                     id: x.id,
                     name: x.name,
                 })))
+                setLoading(false)
+
             } catch (error) {
                 console.log('Failed to fetch category api: ',error);
             }
 
         })()
     },[]);
-
     const handleCategoryClick = (newCategoryId, newCategoryName) => {
         if(!onChange) return;
         onChange(newCategoryId, newCategoryName)
@@ -55,11 +59,20 @@ function FilterByCategory({ onChange }) {
             </Typography>
             <ul className={classes.menu}>
                 {
-                    categoryList.map(category => (
-                        <li key={category.id} onClick={() => handleCategoryClick(category.id, category.name)}>
-                            <Typography variant="body2">{category.name}</Typography>
-                        </li>
-                    ))
+                    loading ? (
+                        Array.from({length: 6}).map((x,i) => (
+                            <li key={i}>
+                                <Skeleton variant='text'/>
+                            </li>
+                        ))
+                    ) : (
+                        categoryList.map(category => (
+                            <li key={category.id} onClick={() => handleCategoryClick(category.id, category.name)}>
+                                        <Typography variant="body2">{category.name}</Typography>
+                            </li>
+                        ))
+                    )
+                    
                 }
             </ul>
         </Box>
