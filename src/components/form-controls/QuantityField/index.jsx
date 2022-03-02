@@ -13,7 +13,7 @@ import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setQuantity } from '../../../features/Cart/cartSlice';
 import {useSnackbar} from "notistack"
 QuantityField.propTypes = {
@@ -42,7 +42,7 @@ function QuantityField(props) {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const { form, name, label, disabled, onChange, item, onDelete } = props;
+  const { form, name, label, disabled, onChange, item, onDelete, userId } = props;
   const { errors, setValue, getValues } = form;
   const hasError = errors[name];
 
@@ -50,7 +50,8 @@ function QuantityField(props) {
     setOpen(false);
     setValue(name, Number.parseInt(item.quantity) ? Number.parseInt(item.quantity) + 1 : 1)
     dispatch(setQuantity({
-      id: item.id,
+      userId,
+      productId: item.id,
       quantity: 1,
     }));
 
@@ -105,11 +106,13 @@ function QuantityField(props) {
                   if(Number.parseInt(e.target.value) <= 0){
                     enqueueSnackbar('Số lượng tối thiểu là 1',{variant:'warning'})
                   }
-                  const action = setQuantity({
-                    id: item.id,
-                    quantity: Number.parseInt(e.target.value),
-                  });
-                  dispatch(action);
+                  if(item){
+                    const action = setQuantity({
+                      id: item.id,
+                      quantity: Number.parseInt(e.target.value),
+                    });
+                    dispatch(action);
+                  }
                 }}
                 onBlur={onBlur}
               />

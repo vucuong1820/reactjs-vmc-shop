@@ -1,7 +1,6 @@
-import React from 'react';
+import { Box, makeStyles, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { Box, Button, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import CartItem from './CartItem';
 
@@ -23,7 +22,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 function CartProduct({ count }) {
-  const cartItemList = useSelector((state) => state.cart.cartItems);
+  const currentUserId = useSelector(state => state.user.current.id)
+  const cartItemList = useSelector((state) => state.cart.cartItems[currentUserId]);
   const classes = useStyles();
   return (
     <Box className={classes.root}>
@@ -33,7 +33,7 @@ function CartProduct({ count }) {
       <ul className={classes.listProduct}>
         {cartItemList.map((item) => (
           <li key={item.id}>
-            <CartItem item={item} />
+            <CartItem item={item} userId={currentUserId} />
           </li>
         ))}
       </ul>
