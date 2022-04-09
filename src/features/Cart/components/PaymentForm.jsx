@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { cartTotalSelector } from '../selectors';
 import emailjs from '@emailjs/browser';
 import { formatPrice } from '../../../utils/common';
-import {useSnackbar} from "notistack"
+import { useSnackbar } from 'notistack';
 PaymentForm.propTypes = {};
 
 const useStyles = makeStyles((theme) => ({
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function PaymentForm(props) {
-  const {enqueueSnackbar} = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
   const currentUserId = useSelector((state) => state.user.current.id);
   const [isSubmit, setIsSubmit] = useState(false);
   const cartItemList = useSelector((state) => state.cart.cartItems[currentUserId]);
@@ -89,21 +89,13 @@ function PaymentForm(props) {
         phone: `0${values.phone}`,
         cartTable: generateCartTable(cartItemList),
       };
-      emailjs.send('service_qk8f2og', 'template_0z3zk8j', formData, 'QqotkY8W07XGWOsKq').then(
-        (result) => {
-          console.log(result.text, 'Sent successfully!');
-        },
-        (error) => {
-          console.log(error.text, 'Failed to send!');
-        }
-      );
-      await emailjs.send('service_qk8f2og', 'template_0z3zk8j', formData, 'QqotkY8W07XGWOsKq');
-      enqueueSnackbar('Vui lòng kiểm tra email để xác nhận đơn hàng', {variant: 'success'})
+      await emailjs.send(process.env.REACT_APP_EMAILJS_SERVICE_ID, process.env.REACT_APP_EMAILJS_TEMPLATE_ID, formData, process.env.REACT_APP_EMAILJS_USER_ID);
+      enqueueSnackbar('Vui lòng kiểm tra email để xác nhận đơn hàng', { variant: 'success',autoHideDuration: 3000 });
       setIsSubmit(false);
-      form.reset()
+      form.reset();
     } catch (error) {
       console.log('Failed to send: ', error.text);
-      enqueueSnackbar(`Xảy ra lỗi trong quá trình xác thực thông tin: ${error.text}`, {variant: 'error'})
+      enqueueSnackbar(`Xảy ra lỗi trong quá trình xác thực thông tin: ${error.text}`, { variant: 'error',autoHideDuration: 3000 });
       setIsSubmit(false);
     }
   };
