@@ -10,7 +10,8 @@ CartProduct.propTypes = {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(3, 0),
+    padding: theme.spacing(3, 2),
+
   },
   title: {
     fontWeight: 'bold',

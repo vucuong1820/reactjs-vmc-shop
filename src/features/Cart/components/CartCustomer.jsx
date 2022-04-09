@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Box, Button, IconButton, Typography } from '@material-ui/core';
 import ConfirmationNumberOutlinedIcon from '@material-ui/icons/ConfirmationNumberOutlined';
 import { makeStyles } from '@material-ui/core';
 import { formatPrice } from '../../../utils/common';
+import ConfirmDialog from './ConfirmDialog';
 
 CartCustomer.propTypes = {
   total: PropTypes.number,
@@ -40,8 +41,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function CartCustomer({ total }) {
+  const [openDialog, setOpenDialog] = useState(false)
   const classes = useStyles();
   const customerName = JSON.parse(localStorage.getItem('user')).fullName;
+  const handleCloseDialog = () => {
+    setOpenDialog(false)
+  }
   return (
     <Box className={classes.root}>
       <Typography className={classes.title}>Giao tới</Typography>
@@ -62,9 +67,10 @@ function CartCustomer({ total }) {
           Tổng cộng: <span>{formatPrice(total)}</span>{' '}
         </Typography>
       </Box>
-      <Button variant="contained" color="secondary" size="large" fullWidth>
+      <Button onClick={() => setOpenDialog(true)} variant="contained" color="secondary" size="large" fullWidth>
         Mua ngay
       </Button>
+      <ConfirmDialog open={openDialog} handleClose={handleCloseDialog}/>
     </Box>
   );
 }

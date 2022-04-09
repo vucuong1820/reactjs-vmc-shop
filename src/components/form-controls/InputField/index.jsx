@@ -11,8 +11,7 @@ InputField.propTypes = {
   disabled: PropTypes.bool,
 };
 
-function InputField(props) {
-  const { form, name, label, disabled } = props;
+function InputField({form, name, label, disabled, type = ""}) {
 
   const { errors } = form;
   const hasError = errors[name];
@@ -35,6 +34,7 @@ function InputField(props) {
           value={value}
           onChange={onChange}
           onBlur={onBlur}
+          type={type}
         />
       )}
     />
