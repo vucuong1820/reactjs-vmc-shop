@@ -30,6 +30,7 @@ CartItem.propTypes = {
 const useStyles = makeStyles((theme) => ({
   root: {
     marginRight: theme.spacing(3),
+    padding: theme.spacing(2),
     display: 'flex',
     flexFlow: 'row nowrap',
     alignItems: 'center',
