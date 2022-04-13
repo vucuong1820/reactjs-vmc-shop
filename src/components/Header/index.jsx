@@ -1,23 +1,25 @@
-import { Badge, Box, IconButton, InputBase, Menu, MenuItem } from '@material-ui/core';
+import { Avatar, Badge, Box, IconButton, List, ListItem, ListItemAvatar, ListItemText, Menu, MenuItem } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import {alpha, makeStyles } from '@material-ui/core/styles';
+import { alpha, makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { AccountCircle, Close, ShoppingCart } from '@material-ui/icons';
 import CodeIcon from '@material-ui/icons/Code';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import Login from '../../features/Auth/components/Login';
 import Register from '../../features/Auth/components/Register';
 import { logout } from '../../features/Auth/userSlice';
 import { cartItemsCountSelector } from '../../features/Cart/selectors';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import SearchBar from '../SearchBar';
-
+import EmailIcon from '@material-ui/icons/Email';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 const useStyles = makeStyles((theme) => ({
   root: {
     background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
@@ -74,6 +76,7 @@ export default function ButtonAppBar() {
   const currentUser = useSelector((state) => state.user.current);
   const isLogined = Boolean(currentUser.id);
   const [open, setOpen] = useState(false);
+  const [isShowProfile, setIsShowProfile] = useState(false)
   const [mode, setMode] = useState(MODE.LOGIN);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -94,6 +97,7 @@ export default function ButtonAppBar() {
   const handleCloseMenu = (e) => {
     setAnchorEl(null);
   };
+
 
   const handleLogout = () => {
     const action = logout();
@@ -151,12 +155,61 @@ export default function ButtonAppBar() {
             }}
             getContentAnchorEl={null}
           >
-            <MenuItem onClick={handleCloseMenu}>My account</MenuItem>
+            <MenuItem onClick={() =>{
+              setIsShowProfile(true);
+              setAnchorEl(null);
+            }}>My account</MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
+      <Dialog
+      open={isShowProfile}
+      aria-labelledby="form-dialog-title"
+      maxWidth="sm"
+      fullWidth
+      onClose={() => setIsShowProfile(false) }
+      >
+        <IconButton onClick={() => setIsShowProfile(false)}>
+          <Close  className={classes.closeButton} />
+        </IconButton>
+        <DialogTitle id="simple-dialog-title">Thông tin người dùng</DialogTitle>
+        <DialogContent>
+          <List dense={false}>
+          <ListItem >
+            <ListItemAvatar>
+              <Avatar>
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              primary={currentUser?.fullName}
+            />
+          </ListItem>
+          <ListItem >
+            <ListItemAvatar>
+              <Avatar>
+                <EmailIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              primary={currentUser?.email}
+            />
+          </ListItem>
+          <ListItem >
+            <ListItemAvatar>
+              <Avatar>
+                <AccessTimeIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              primary={currentUser?.created_at ? new Intl.DateTimeFormat('vi-VN').format(new Date(currentUser?.created_at)) : null}
+              secondary="Ngày khởi tạo"
+            />
+          </ListItem> 
+          </List>
 
+        </DialogContent>
+      </Dialog>
       <Dialog
         open={open}
         aria-labelledby="form-dialog-title"

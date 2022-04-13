@@ -27,14 +27,14 @@ function Register(props) {
             console.log('new user: ',user);
 
             // show message 
-            enqueueSnackbar('Register successfully', {variant: 'success'})
+            enqueueSnackbar('Register successfully', {variant: 'success',autoHideDuration: 3000})
 
             // close dialog
             const {closeDialog} = props;
             if(closeDialog) closeDialog();
 
         } catch (error) {
-            enqueueSnackbar(error.message, {variant: 'error'})
+            enqueueSnackbar(error.message, {variant: 'error', autoHideDuration: 3000})
         }
     }
     return (

@@ -32,7 +32,7 @@ function CartProduct({ count }) {
         Giỏ hàng ({`${count || 'chưa có'} sản phẩm`})
       </Typography>
       <ul className={classes.listProduct}>
-        {cartItemList.map((item) => (
+        {cartItemList?.map((item) => (
           <li key={item.id}>
             <CartItem item={item} userId={currentUserId} />
           </li>

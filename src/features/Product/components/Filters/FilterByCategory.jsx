@@ -29,7 +29,6 @@ const useStyles = makeStyles(theme => ({
 
 function FilterByCategory({ onChange }) {
     const [loading, setLoading] = useState(true)
-    console.log(loading)
     const classes = useStyles()
     const [categoryList, setCategoryList] = useState([]);
     useEffect(() => {

@@ -47,6 +47,7 @@ function CartCustomer({ total }) {
   const handleCloseDialog = () => {
     setOpenDialog(false)
   }
+  console.log(formatPrice(total))
   return (
     <Box className={classes.root}>
       <Typography className={classes.title}>Giao tới</Typography>
@@ -61,10 +62,10 @@ function CartCustomer({ total }) {
       </Box>
 
       <Box className={classes.price}>
-        <Typography>Tạm tính: {formatPrice(total)} </Typography>
+        <Typography>Tạm tính: {total ? formatPrice(total) : ''} </Typography>
         <Typography>Giảm giá: </Typography>
         <Typography className={classes.totalPrice}>
-          Tổng cộng: <span>{formatPrice(total)}</span>{' '}
+          Tổng cộng: <span>{total ? formatPrice(total) : ''}</span>
         </Typography>
       </Box>
       <Button onClick={() => setOpenDialog(true)} variant="contained" color="secondary" size="large" fullWidth>
